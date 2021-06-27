@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -137,10 +138,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # CELERY_TASK_SERIALIZER = 'json'
 
 #email
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = "465"
-EMAIL_HOST_USER = os.environ['email']
-EMAIL_HOST_PASSWORD = os.environ['email_pass']
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS=True 
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+APPLICATION_EMAIL = 'django_snippets<esteban.delahoz15@gmail.com>'
+DEFAULT_FROM_EMAIL = 'django_snippets<esteban.delahoz15@gmail.com>'
+EMAIL_HOST_USER= 'esteban.delahoz15@gmail.com'#os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD= 'ijzxmhgfwtwbzbfa'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 
