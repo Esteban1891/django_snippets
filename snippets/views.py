@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from .models import Snippet, Language
 
 
 def login(request):
@@ -9,8 +10,18 @@ def logout(request):
     return render(request, 'login.html', {})
 
 
-def index(request):
-    return render(request, 'index.html', {})
+class IndexView(ListView):
+    model = Snippet
+    template_name = "index.html"
+
+    def get_queryset(self):
+        qs = Snippet.objects.filter(public=True)
+        if self.request.user.is_authenticated:
+            user_private = Snippet.objects.filter(public=False,user=self.request.user)
+            qs = qs.union(user_private)
+        return qs.order_by("-created")
+
+
 
 
 def language(request):
