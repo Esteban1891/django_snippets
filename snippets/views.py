@@ -37,3 +37,17 @@ class SnippetCreateView(LoginRequiredMixin,CreateView):
 
     def get_success_url(self):
         return reverse_lazy('snippet',kwargs={"pk":self.object.pk})
+
+
+class SnippetUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
+    model = Snippet
+    template_name = "snippets/snippet_add.html"
+    form_class = SnippetForm
+
+    def test_func(self):
+        snip=self.get_object()
+        return self.request.user==snip.user
+
+    def get_success_url(self):
+        return reverse_lazy('snippet',kwargs={"pk":self.object.pk})    
+
