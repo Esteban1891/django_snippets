@@ -51,3 +51,11 @@ class SnippetUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     def get_success_url(self):
         return reverse_lazy('snippet',kwargs={"pk":self.object.pk})    
 
+class SnippetDeleteView(UserPassesTestMixin,DeleteView):
+    model = Snippet
+    template_name = 'snippets/snippet_delete.html'
+    success_url = reverse_lazy('index')
+
+    def test_func(self):
+        snip=self.get_object()
+        return self.request.user==snip.user
