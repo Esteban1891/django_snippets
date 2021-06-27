@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-md-8">
+    <br>
+    <form method="POST">
+        {% csrf_token %}
+        <p>¿Quiere borrar: {{ object.name }}?</p>
+        <button type="submit" class="btn btn-danger" onclick="return confirm('seguro?')">SI</button>
+        <a href="{% url 'snippet' object.id %}"><button type="button" class="btn btn-info">NO</button></a>
+        
+        <p>descripción: {{ object.description }}</p>
+        <div style="background-color:lightgray;border-radius: 5px;">
+          <!-- Código del Snippet -->
+          <samp>{{object.pigmented_snippet | safe}}</samp>
+          <!-- Código del Snippet -->
+        </div>        
+    </form>
+  </div>
+</div>
+{% endblock %}
