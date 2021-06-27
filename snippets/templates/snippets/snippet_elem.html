@@ -1,0 +1,21 @@
+<!-- SNIPPET -->
+<div class="card">
+    <h5 class="card-header">{{ snip.name }}
+        {% if not snip.public %}
+            <span class="badge badge-warning">Privado</span>
+        {% endif %}
+        <a href="{% url 'user_snippets' snip.user.username %}"  class="float-right"><small>{{ snip.user.username }}</small></a></h5>
+    <div class="card-body">
+        <a href="{% url 'language' snip.language.slug %}"><h5 class="card-title">{{ snip.language.name }}</h5></a> 
+        <h6 class="card-subtitle mb-2 text-muted">Creado: {{ snip.created }}</h6>
+        <p class="card-text">{{ snip.description }}</p>
+        <hr>
+        <a href="{% url 'snippet' snip.id %}" class="btn btn-primary">Ver</a>
+        {% if user.is_authenticated and user == snip.user %}
+            <a href="{% url 'snippet_edit' snip.id %}" class="btn btn-info">Editar</a>
+            <a href="{% url 'snippet_delete' snip.id %}" class="btn btn-danger">Eliminar</a>
+        {% endif %}
+    </div>
+</div>
+<br>
+<!-- FIN SNIPPET -->

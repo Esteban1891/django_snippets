@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-md-center">
+  <div class="col-md-8">
+    <br>
+    <div class="card">
+      <h5 class="card-header">{{ object.name }}<a href="{% url 'user_snippets' object.user.username%}"  class="float-right"><small>{{ object.user.username }}</small></a></h5>
+      <div class="card-body">
+        <a href="{% url 'language' object.language.slug %}"><h5 class="card-title">{{ object.language.name }}</h5></a> 
+        <h6 class="card-subtitle mb-2 text-muted">Creado: {{ object.created }}</h6>
+        <p class="card-text">{{ object.description }}</p>
+        <div style="background-color:lightgray;border-radius: 5px;">
+          <!-- Código del Snippet -->
+          <samp>{{object.pigmented_snippet | safe}}</samp>
+          <!-- Código del Snippet -->
+        </div>
+        <hr>
+        <br>
+        {% if user.is_authenticated and user == object.user %}
+          <a href="{% url 'snippet_edit' object.id %}" class="btn btn-info">Editar</a>
+          <a href="{% url 'snippet_delete' object.id %}" class="btn btn-danger">Eliminar</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

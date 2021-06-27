@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
     <head>
@@ -10,6 +11,8 @@
         <link rel="stylesheet" href="signin.css" crossorigin="anonymous">
         <style type="text/css"></style>
         <title>Django Snippets</title>
+        <!-- pygments css -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css'%}">
     </head>
     <body>
         <header>
@@ -25,11 +28,18 @@
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Snipets</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{% url 'snippet_add' %}">Cargar Snippets</a>
-                                <a class="dropdown-item" href="{% url 'index' %}">Listado de Snippets</a>                
+                                <a class="dropdown-item" href="{% url 'index' %}">Listado de Snippets</a>
+                                {% if user.is_authenticated %}
+                                <a class="dropdown-item" href="{% url 'user_snippets' user.username %}">Mis Snippets</a>
+                                {% endif %}              
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" tabindex="-1">Salir</a>
+                            {% if user.is_authenticated %}
+                                <a class="nav-link" href="{% url 'logout' %}" tabindex="-1">Salir</a>
+                            {% else %}
+                                <a class="nav-link" href="{% url 'login' %}" tabindex="-1">Entrar</a>
+                            {% endif %}
                         </li>
                     </ul>
                 </div>

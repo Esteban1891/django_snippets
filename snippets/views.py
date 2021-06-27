@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.urls import reverse_lazy
 from .forms import SnippetForm
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth import get_user_model
 
 
 class IndexView(ListView):
@@ -75,5 +76,24 @@ class SnippetLanguageListView(ListView):
         qs = Snippet.objects.filter(public=True, language=self.lang)
         if self.request.user.is_authenticated:
             user_private = Snippet.objects.filter(public=False,user=self.request.user, language=self.lang)
+            qs = qs.union(user_private)
+        return qs.order_by("-created")
+
+
+class SnippetUserListView(ListView):
+    model = Snippet
+    template_name = "snippets/user_snippets.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["creator"] = self.kwargs["username"]
+        return context
+
+    def get_queryset(self):
+        self.creator = get_object_or_404(get_user_model(), username=self.kwargs['username'])
+        print(self.creator)
+        qs = Snippet.objects.filter(public=True, user=self.creator)
+        if self.request.user.is_authenticated and self.request.user == self.creator:
+            user_private = Snippet.objects.filter(public=False,user=self.request.user)
             qs = qs.union(user_private)
         return qs.order_by("-created")
