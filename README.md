@@ -106,7 +106,7 @@ heroku open
 ```bash
 heroku login
 
-cd backend/
+cd django_snippets/
 
 git init
 
