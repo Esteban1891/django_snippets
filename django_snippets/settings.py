@@ -123,6 +123,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 
 
+
 #login
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = 'index'
@@ -131,7 +132,7 @@ LOGOUT_REDIRECT_URL = 'index'
 #crispy
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-#celery
+#celeryta
 # CELERY_BROKER_URL = os.environ['REDIS_URL']
 # CELERY_ACCEPT_CONTENT = ['json']
 # CELERY_TASK_SERIALIZER = 'json'
