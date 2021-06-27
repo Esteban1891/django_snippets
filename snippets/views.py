@@ -2,6 +2,8 @@ from django.shortcuts import render
 from .models import Snippet, Language
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from django.urls import reverse_lazy
+from .forms import SnippetForm
 
 
 class IndexView(ListView):
@@ -22,3 +24,16 @@ class SnippetDetailView(UserPassesTestMixin,DetailView):
         snip = self.get_object()
         return snip.public or self.request.user == snip.user
 
+
+
+class SnippetCreateView(LoginRequiredMixin,CreateView):
+    model = Snippet
+    template_name = "snippets/snippet_add.html"
+    form_class = SnippetForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('snippet',kwargs={"pk":self.object.pk})
