@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from pygments import highlight
 from pygments.lexers import get_lexer_by_name
 from pygments.formatters import HtmlFormatter
-
+from .utils import send_email_task
 
 
 class Language(models.Model):
@@ -45,3 +45,11 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ("-created",)
+
+
+def send_mail_snippet(sender, instance, *args, **kwargs):
+    if instance.user.email:
+        print("\n\n\nPOR MANDAR\n\n\n")
+        send_email_task.delay(instance.name, instance.description, instance.user.email)
+
+post_save.connect(send_mail_snippet, sender=Snippet)
