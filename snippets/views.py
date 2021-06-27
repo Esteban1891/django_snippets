@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Snippet, Language
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 
 def login(request):
