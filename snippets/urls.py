@@ -1,15 +1,15 @@
 from django.urls import path
-
+from django.contrib.auth.views import LoginView, LogoutView
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('login/', views.login, name='login'),
-    path('logout/', views.logout, name='logout'),
-    path('snippets/python/', views.language, name='language'),
-    path('snippets/user/juancito/', views.user_snippets, name='user_snippets'),
-    path('snippets/snippet/', views.snippet, name='snippet'),
-    path('snippets/add/', views.snippet_add, name='snippet_add'),
-    path('snippets/edit/', views.snippet_edit, name='snippet_edit'),
-    path('snippets/delete/', views.snippet_delete, name='snippet_delete'),
+    path("", views.IndexView.as_view(), name="index"),
+    path('login/', LoginView.as_view(template_name = "login.html"), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('snippets/snippet/<int:pk>', views.SnippetDetailView.as_view(), name='snippet'),
+    path('snippets/add/', views.SnippetCreateView.as_view(), name='snippet_add'),
+    path('snippets/edit/<int:pk>', views.SnippetUpdateView.as_view(), name='snippet_edit'),
+    path('snippets/delete/<int:pk>', views.SnippetDeleteView.as_view(), name='snippet_delete'),
+    path('snippets/lang/<slug:lang>', views.SnippetLanguageListView.as_view(), name='language'),
+
 ]
