@@ -1,14 +1,7 @@
 from django.shortcuts import render
 from .models import Snippet, Language
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-
-
-def login(request):
-    return render(request, 'login.html', {})
-
-
-def logout(request):
-    return render(request, 'login.html', {})
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 
 
 class IndexView(ListView):
@@ -22,28 +15,10 @@ class IndexView(ListView):
             qs = qs.union(user_private)
         return qs.order_by("-created")
 
+class SnippetDetailView(UserPassesTestMixin,DetailView):
+    model = Snippet
+    
+    def test_func(self):
+        snip = self.get_object()
+        return snip.public or self.request.user == snip.user
 
-
-
-def language(request):
-    return render(request, 'index.html', {})
-
-
-def user_snippets(request):
-    return render(request, 'snippets/user_snippets.html', {})
-
-
-def snippet(request):
-    return render(request, 'snippets/snippet.html', {})
-
-
-def snippet_add(request):
-    return render(request, 'snippets/snippet_add.html', {})
-
-
-def snippet_edit(request):
-    return render(request, 'snippets/snippet_add.html', {})
-
-
-def snippet_delete(request):
-    return render(request, 'snippets/user_snippets.html', {})
