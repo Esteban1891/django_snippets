@@ -1,10 +1,10 @@
-from django.shortcuts import render
-from .models import Snippet, Language
+from django.http import request
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
+from .models import Snippet, Language
 from django.urls import reverse_lazy
 from .forms import SnippetForm
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.contrib.auth import get_user_model
 
 
@@ -19,13 +19,13 @@ class IndexView(ListView):
             qs = qs.union(user_private)
         return qs.order_by("-created")
 
+
 class SnippetDetailView(UserPassesTestMixin,DetailView):
     model = Snippet
     
     def test_func(self):
         snip = self.get_object()
         return snip.public or self.request.user == snip.user
-
 
 
 class SnippetCreateView(LoginRequiredMixin,CreateView):
@@ -53,6 +53,7 @@ class SnippetUpdateView(LoginRequiredMixin,UserPassesTestMixin,UpdateView):
     def get_success_url(self):
         return reverse_lazy('snippet',kwargs={"pk":self.object.pk})    
 
+
 class SnippetDeleteView(UserPassesTestMixin,DeleteView):
     model = Snippet
     template_name = 'snippets/snippet_delete.html'
@@ -61,6 +62,7 @@ class SnippetDeleteView(UserPassesTestMixin,DeleteView):
     def test_func(self):
         snip=self.get_object()
         return self.request.user==snip.user
+
 
 class SnippetLanguageListView(ListView):
     model = Snippet
