@@ -132,9 +132,9 @@ LOGOUT_REDIRECT_URL = 'index'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #celery
-CELERY_BROKER_URL = os.environ['REDIS_URL']
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
+# CELERY_BROKER_URL = os.environ['REDIS_URL']
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
 
 #email
 EMAIL_HOST = "smtp.gmail.com"
