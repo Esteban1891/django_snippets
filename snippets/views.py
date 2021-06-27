@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.urls import reverse_lazy
 from .forms import SnippetForm
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 
 
 class IndexView(ListView):
@@ -59,3 +60,20 @@ class SnippetDeleteView(UserPassesTestMixin,DeleteView):
     def test_func(self):
         snip=self.get_object()
         return self.request.user==snip.user
+
+class SnippetLanguageListView(ListView):
+    model = Snippet
+    template_name = "snippets/language.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["language"] = get_object_or_404(Language, slug=self.kwargs['lang']).name
+        return context
+
+    def get_queryset(self):
+        self.lang = get_object_or_404(Language, slug=self.kwargs['lang'])
+        qs = Snippet.objects.filter(public=True, language=self.lang)
+        if self.request.user.is_authenticated:
+            user_private = Snippet.objects.filter(public=False,user=self.request.user, language=self.lang)
+            qs = qs.union(user_private)
+        return qs.order_by("-created")
